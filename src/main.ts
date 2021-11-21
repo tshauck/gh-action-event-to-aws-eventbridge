@@ -17,12 +17,10 @@ async function run(): Promise<void> {
           EventBusName: eventBusName,
           DetailType: detailType,
           Source: source,
-          Detail: JSON.stringify(github.context.payload, undefined, 2)
-        }
-      ]
+          Detail: JSON.stringify(github.context.payload),
+        },
+      ],
     }
-    core.info(`Putting Entries: ${JSON.stringify(params)}`)
-
     eb.putEvents(params, (err, data) => {
       if (err) {
         core.setFailed(String(err))
@@ -32,18 +30,18 @@ async function run(): Promise<void> {
       const failedCount = data.FailedEntryCount ?? 0
 
       if (failedCount === 0) {
+        core.info('No message failures, exiting.')
         return
       }
-
-      core.info(`Got ${failedCount} failures.`)
 
       const entries = data.Entries ?? []
       for (const entryResponse of entries) {
         const errorCode = entryResponse.ErrorCode ?? 'Unknown Error Code'
-        const errorMessage =
-          entryResponse.ErrorMessage ?? 'Unknown Error Message'
+        const errorMessage = entryResponse.ErrorMessage ?? 'Unknown Error Message'
         core.info(`Got error code ${errorCode}, with message ${errorMessage}`)
       }
+
+      core.setFailed(`Got ${failedCount} message failures, see action logs.`)
     })
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
