@@ -1,105 +1,36 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# GitHub Action Event to AWS EventBridge
 
-# Create a JavaScript Action using TypeScript
+> A custom github action to send messages to AWS EventBridge.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## User Guide
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
-
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+The goal of this action is to facilitate sending events to an AWS EventBridge
+EventBus. To do so, you need to configure the event like so:
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+- uses: tshauck/gh-action-event-to-aws-eventbridge@v1
+  with:
+    event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+`event_bus_name` is the only required parameter. The other parameters are:
 
-## Usage:
+| parameter | default |
+| ---- | ----- |
+| detail_type | `GitHub Action Event` |
+| source | `gh.event` |
+| detail | github.context.payload's value |
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+## Terms of Use
+
+Using this action is free for open source, academic, and other
+non-commercial activities.
+
+If you're using this action as part of commercial activities, you must sponsor
+development via [GitHub Sponsors](https://github.com/sponsors/tshauck) for
+no-less than $1 per month or a one-time $5 payment.
+
+If you just wanna be a Chad, send me some coin:
+
+* BTC: `3GswUVYdLTP3L36iBMCncVuJVAbpUnorhZ`
+* ETH: `0x2805409b7fd27610B072Fc0F537Da9CA9e5D45D7`

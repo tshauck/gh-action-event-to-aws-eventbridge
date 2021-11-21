@@ -1,0 +1,45 @@
+name: 'merge'
+on: # rebuild any PRs and main branch changes
+  push:
+    branches:
+      - main
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run all
+  test:
+    env:
+      AWS_DEFAULT_REGION: us-west-2
+
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: ${{ secrets.ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+      - uses: ./
+        with:
+          event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
+          detail_type: 'GitHub Action Test Event'
+      - uses: tshauck/gh-action-event-to-aws-eventbridge@0.0.1
+        with:
+          event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
+          detail_type: 'GitHub Action Test Event'
