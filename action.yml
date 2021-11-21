@@ -1,11 +1,17 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Trent Hauck'
+description: 'Sends events to an EventBridge bus.'
 inputs:
-  milliseconds: # change this
+  event_bus_name: # change this
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'which event bus to send the event to'
+  detail_type: # change this
+    required: false
+    description: 'The detail type for the event.'
+    default: 'GitHub Action Event'
+  source: # change this
+    required: false
+    description: 'The source for this event, defaults to gh.event'
+    default: 'gh.event'
 runs:
   using: 'node12'
   main: 'dist/index.js'

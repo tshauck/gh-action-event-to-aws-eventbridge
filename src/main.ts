@@ -1,16 +1,50 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as github from '@actions/github'
+
+import EventBridge from 'aws-sdk/clients/eventbridge'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const eventBusName: string = core.getInput('event_bus_name')
+    const detailType: string = core.getInput('detail_type')
+    const source: string = core.getInput('source')
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const eb = new EventBridge()
 
-    core.setOutput('time', new Date().toTimeString())
+    const params = {
+      Entries: [
+        {
+          EventBusName: eventBusName,
+          DetailType: detailType,
+          Source: source,
+          Detail: JSON.stringify(github.context.payload, undefined, 2)
+        }
+      ]
+    }
+    core.info(`Putting Entries: ${JSON.stringify(params)}`)
+
+    eb.putEvents(params, (err, data) => {
+      if (err) {
+        core.setFailed(String(err))
+        return
+      }
+
+      const failedCount = data.FailedEntryCount ?? 0
+
+      if (failedCount === 0) {
+        return
+      }
+
+      core.info(`Got ${failedCount} failures.`)
+
+      const entries = data.Entries ?? []
+      for (const entryResponse of entries) {
+        const errorCode = entryResponse.ErrorCode ?? 'Unknown Error Code'
+        const errorMessage =
+          entryResponse.ErrorMessage ?? 'Unknown Error Message'
+        core.info(`Got error code ${errorCode}, with message ${errorMessage}`)
+      }
+    })
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
