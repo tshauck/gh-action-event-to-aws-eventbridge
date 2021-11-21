@@ -9,6 +9,10 @@ async function run(): Promise<void> {
     const detailType: string = core.getInput('detail_type')
     const source: string = core.getInput('source')
 
+    const passedDetail: string = core.getInput('detail')
+    const detail: string =
+      passedDetail ?? JSON.stringify(github.context.payload)
+
     const eb = new EventBridge()
 
     const params = {
@@ -17,9 +21,9 @@ async function run(): Promise<void> {
           EventBusName: eventBusName,
           DetailType: detailType,
           Source: source,
-          Detail: JSON.stringify(github.context.payload),
-        },
-      ],
+          Detail: detail
+        }
+      ]
     }
     eb.putEvents(params, (err, data) => {
       if (err) {
@@ -37,7 +41,8 @@ async function run(): Promise<void> {
       const entries = data.Entries ?? []
       for (const entryResponse of entries) {
         const errorCode = entryResponse.ErrorCode ?? 'Unknown Error Code'
-        const errorMessage = entryResponse.ErrorMessage ?? 'Unknown Error Message'
+        const errorMessage =
+          entryResponse.ErrorMessage ?? 'Unknown Error Message'
         core.info(`Got error code ${errorCode}, with message ${errorMessage}`)
       }
 

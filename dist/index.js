@@ -47,6 +47,8 @@ function run() {
             const eventBusName = core.getInput('event_bus_name');
             const detailType = core.getInput('detail_type');
             const source = core.getInput('source');
+            const passedDetail = core.getInput('detail');
+            const detail = passedDetail !== null && passedDetail !== void 0 ? passedDetail : JSON.stringify(github.context.payload);
             const eb = new eventbridge_1.default();
             const params = {
                 Entries: [
@@ -54,11 +56,10 @@ function run() {
                         EventBusName: eventBusName,
                         DetailType: detailType,
                         Source: source,
-                        Detail: JSON.stringify(github.context.payload, undefined, 2),
+                        Detail: detail,
                     },
                 ],
             };
-            core.info(`Putting Entries: ${JSON.stringify(params)}`);
             eb.putEvents(params, (err, data) => {
                 var _a, _b, _c, _d;
                 if (err) {
@@ -67,15 +68,16 @@ function run() {
                 }
                 const failedCount = (_a = data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
                 if (failedCount === 0) {
+                    core.info('No message failures, exiting.');
                     return;
                 }
-                core.info(`Got ${failedCount} failures.`);
                 const entries = (_b = data.Entries) !== null && _b !== void 0 ? _b : [];
                 for (const entryResponse of entries) {
                     const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : 'Unknown Error Code';
                     const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : 'Unknown Error Message';
                     core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
                 }
+                core.setFailed(`Got ${failedCount} message failures, see action logs.`);
             });
         }
         catch (error) {

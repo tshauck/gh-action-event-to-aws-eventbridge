@@ -12,6 +12,9 @@ inputs:
     required: false
     description: 'The source for this event, defaults to gh.event'
     default: 'gh.event'
+  detail: # change this
+    required: false
+    description: 'The detail for this event, defaults to event payload.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
