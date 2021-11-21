@@ -35,4 +35,4 @@ jobs:
       - uses: ./
         with:
           event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
-          detail_type: 'GithHub Action Test Event'
+          detail_type: 'GitHub Action Test Event'
