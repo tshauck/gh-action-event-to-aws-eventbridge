@@ -10,6 +10,7 @@ async function run(): Promise<void> {
     const source: string = core.getInput('source')
 
     const passedDetail: string = core.getInput('detail')
+    core.info(`Supplied detail: ${passedDetail}`)
     const detail: string =
       passedDetail ?? JSON.stringify(github.context.payload)
 
