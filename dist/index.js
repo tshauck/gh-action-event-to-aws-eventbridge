@@ -49,7 +49,7 @@ function run() {
             const source = core.getInput('source');
             const passedDetail = core.getInput('detail');
             core.info(`Supplied detail: ${passedDetail}`);
-            const detail = passedDetail !== null && passedDetail !== void 0 ? passedDetail : JSON.stringify(github.context.payload);
+            const detail = passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail;
             const eb = new eventbridge_1.default();
             const params = {
                 Entries: [
