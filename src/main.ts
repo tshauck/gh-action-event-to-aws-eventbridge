@@ -12,7 +12,9 @@ async function run(): Promise<void> {
     const passedDetail: string = core.getInput('detail')
 
     const detail: string =
-      passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail
+      passedDetail === ''
+        ? JSON.stringify(github.context.payload)
+        : passedDetail
 
     core.info(`Supplied detail: ${detail}`)
 
@@ -24,9 +26,9 @@ async function run(): Promise<void> {
           EventBusName: eventBusName,
           DetailType: detailType,
           Source: source,
-          Detail: detail,
-        },
-      ],
+          Detail: detail
+        }
+      ]
     }
     eb.putEvents(params, (err, data) => {
       if (err) {
@@ -44,7 +46,8 @@ async function run(): Promise<void> {
       const entries = data.Entries ?? []
       for (const entryResponse of entries) {
         const errorCode = entryResponse.ErrorCode ?? 'Unknown Error Code'
-        const errorMessage = entryResponse.ErrorMessage ?? 'Unknown Error Message'
+        const errorMessage =
+          entryResponse.ErrorMessage ?? 'Unknown Error Message'
         core.info(`Got error code ${errorCode}, with message ${errorMessage}`)
       }
 
