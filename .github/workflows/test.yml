@@ -15,10 +15,24 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
+  test:
+    env:
+      AWS_DEFAULT_REGION: us-west-2
+
+    permissions:
+      id-token: write
+      contents: read
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::063977188001:role/tshauck-gh-action-event-to-aws-eventbridge
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
       - uses: ./
         with:
-          milliseconds: 1000
+          event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
+          detail_type: 'GitHub Action Test Event'
