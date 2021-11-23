@@ -32,6 +32,11 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::063977188001:role/tshauck-gh-action-event-to-aws-eventbridge
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
       - uses: ./
         with:
           event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
