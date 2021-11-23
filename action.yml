@@ -1,4 +1,4 @@
-name: 'Trent Hauck'
+name: 'GitHub Action to EventBridge'
 description: 'Sends events to an EventBridge bus.'
 inputs:
   event_bus_name: # change this
