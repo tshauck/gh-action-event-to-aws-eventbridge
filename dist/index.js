@@ -1,6 +1,93 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 4416:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.eventSettingsToAWSEvent = void 0;
+function eventSettingsToAWSEvent(es) {
+    return {
+        Entries: [
+            {
+                EventBusName: es.eventBusName,
+                DetailType: es.detailType,
+                Source: es.source,
+                Detail: es.detail
+            }
+        ]
+    };
+}
+exports.eventSettingsToAWSEvent = eventSettingsToAWSEvent;
+
+
+/***/ }),
+
+/***/ 5480:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInputs = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const event_settings_1 = __nccwpck_require__(4416);
+function getInputs() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const eventBusName = core.getInput('event_bus_name');
+        const detailType = core.getInput('detail_type');
+        const source = core.getInput('source');
+        const passedDetail = core.getInput('detail');
+        const detail = passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail;
+        const settings = {
+            eventBusName,
+            detailType,
+            source,
+            detail
+        };
+        return (0, event_settings_1.eventSettingsToAWSEvent)(settings);
+    });
+}
+exports.getInputs = getInputs;
+
+
+/***/ }),
+
 /***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -38,48 +125,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = exports.callPutEvents = exports.eventCallback = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
 const eventbridge_1 = __importDefault(__nccwpck_require__(898));
+const input_helper_1 = __nccwpck_require__(5480);
+function eventCallback(err, data) {
+    var _a, _b, _c, _d;
+    if (err) {
+        core.setFailed(String(err));
+        return;
+    }
+    const failedCount = (_a = data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
+    if (failedCount === 0) {
+        core.info('No message failures, exiting.');
+        return;
+    }
+    const entries = (_b = data.Entries) !== null && _b !== void 0 ? _b : [];
+    for (const entryResponse of entries) {
+        const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : 'Unknown Error Code';
+        const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : 'Unknown Error Message';
+        core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
+    }
+    core.setFailed(`Got ${failedCount} message failures, see action logs.`);
+}
+exports.eventCallback = eventCallback;
+function callPutEvents(params) {
+    const eb = new eventbridge_1.default();
+    eb.putEvents(params, eventCallback);
+}
+exports.callPutEvents = callPutEvents;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const eventBusName = core.getInput('event_bus_name');
-            const detailType = core.getInput('detail_type');
-            const source = core.getInput('source');
-            const passedDetail = core.getInput('detail');
-            const detail = passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail;
-            core.info(`Supplied detail: ${detail}`);
-            const eb = new eventbridge_1.default();
-            const params = {
-                Entries: [
-                    {
-                        EventBusName: eventBusName,
-                        DetailType: detailType,
-                        Source: source,
-                        Detail: detail,
-                    },
-                ],
-            };
-            eb.putEvents(params, (err, data) => {
-                var _a, _b, _c, _d;
-                if (err) {
-                    core.setFailed(String(err));
-                    return;
-                }
-                const failedCount = (_a = data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
-                if (failedCount === 0) {
-                    core.info('No message failures, exiting.');
-                    return;
-                }
-                const entries = (_b = data.Entries) !== null && _b !== void 0 ? _b : [];
-                for (const entryResponse of entries) {
-                    const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : 'Unknown Error Code';
-                    const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : 'Unknown Error Message';
-                    core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
-                }
-                core.setFailed(`Got ${failedCount} message failures, see action logs.`);
-            });
+            const params = yield (0, input_helper_1.getInputs)();
+            core.debug(`params: ${params}`);
+            callPutEvents(params);
         }
         catch (error) {
             if (error instanceof Error)
@@ -87,6 +167,7 @@ function run() {
         }
     });
 }
+exports.run = run;
 run();
 
 
@@ -12309,7 +12390,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9182:
+/***/ 8262:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var util = __nccwpck_require__(7985);
@@ -13897,7 +13978,7 @@ module.exports = AWS.SequentialExecutor;
 
 var AWS = __nccwpck_require__(8437);
 var Api = __nccwpck_require__(7657);
-var regionConfig = __nccwpck_require__(9182);
+var regionConfig = __nccwpck_require__(8262);
 
 var inherit = AWS.util.inherit;
 var clientCount = 0;
@@ -21544,7 +21625,7 @@ conversions["RegExp"] = function (V, opts) {
 
 /***/ }),
 
-/***/ 8262:
+/***/ 2275:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -21760,7 +21841,7 @@ exports.implementation = class URLImpl {
 
 const conversions = __nccwpck_require__(5871);
 const utils = __nccwpck_require__(276);
-const Impl = __nccwpck_require__(8262);
+const Impl = __nccwpck_require__(2275);
 
 const impl = utils.implSymbol;
 
