@@ -6,8 +6,6 @@ import * as inputHelper from './../src/input-helper'
 
 import EventBridge from 'aws-sdk/clients/eventbridge'
 
-//https://github.com/actions/checkout/blob/main/__test__/input-helper.test.ts
-
 describe('input-helper tests', () => {
   beforeAll(() => {
     jest.spyOn(core, 'error').mockImplementation(jest.fn())

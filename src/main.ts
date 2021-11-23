@@ -5,10 +5,7 @@ import EventBridge from 'aws-sdk/clients/eventbridge'
 
 import {getInputs} from './input-helper'
 
-export function eventCallback(
-  err: sdk.AWSError,
-  data: EventBridge.PutEventsResponse
-): void {
+export function eventCallback(err: sdk.AWSError, data: EventBridge.PutEventsResponse): void {
   if (err) {
     core.setFailed(String(err))
     return
