@@ -1,6 +1,68 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 2215:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.callPutEvents = exports.eventCallback = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const eventbridge_1 = __importDefault(__nccwpck_require__(898));
+function eventCallback(err, data) {
+    var _a, _b, _c, _d;
+    if (err) {
+        core.setFailed(String(err));
+        return;
+    }
+    const failedCount = (_a = data === null || data === void 0 ? void 0 : data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
+    if (failedCount === 0) {
+        core.info("No message failures, exiting.");
+        return;
+    }
+    const entries = (_b = data === null || data === void 0 ? void 0 : data.Entries) !== null && _b !== void 0 ? _b : [];
+    for (const entryResponse of entries) {
+        const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : "Unknown Error Code";
+        const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : "Unknown Error Message";
+        core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
+    }
+    core.setFailed(`Got ${failedCount} message failures, see action logs.`);
+}
+exports.eventCallback = eventCallback;
+function callPutEvents(params) {
+    const eb = new eventbridge_1.default();
+    eb.putEvents(params, eventCallback);
+}
+exports.callPutEvents = callPutEvents;
+
+
+/***/ }),
+
 /***/ 4416:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -17,9 +79,9 @@ function eventSettingsToAWSEvent(es) {
                 EventBusName: es.eventBusName,
                 DetailType: es.detailType,
                 Source: es.source,
-                Detail: es.detail
-            }
-        ]
+                Detail: es.detail,
+            },
+        ],
     };
 }
 exports.eventSettingsToAWSEvent = eventSettingsToAWSEvent;
@@ -69,16 +131,16 @@ const github = __importStar(__nccwpck_require__(5438));
 const event_settings_1 = __nccwpck_require__(4416);
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
-        const eventBusName = core.getInput('event_bus_name');
-        const detailType = core.getInput('detail_type');
-        const source = core.getInput('source');
-        const passedDetail = core.getInput('detail');
-        const detail = passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail;
+        const eventBusName = core.getInput("event_bus_name");
+        const detailType = core.getInput("detail_type");
+        const source = core.getInput("source");
+        const passedDetail = core.getInput("detail");
+        const detail = passedDetail === "" ? JSON.stringify(github.context.payload) : passedDetail;
         const settings = {
             eventBusName,
             detailType,
             source,
-            detail
+            detail,
         };
         return (0, event_settings_1.eventSettingsToAWSEvent)(settings);
     });
@@ -93,6 +155,8 @@ exports.getInputs = getInputs;
 
 "use strict";
 
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -121,45 +185,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = exports.callPutEvents = exports.eventCallback = void 0;
+exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const eventbridge_1 = __importDefault(__nccwpck_require__(898));
+const event_helper_1 = __nccwpck_require__(2215);
 const input_helper_1 = __nccwpck_require__(5480);
-function eventCallback(err, data) {
-    var _a, _b, _c, _d;
-    if (err) {
-        core.setFailed(String(err));
-        return;
-    }
-    const failedCount = (_a = data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
-    if (failedCount === 0) {
-        core.info('No message failures, exiting.');
-        return;
-    }
-    const entries = (_b = data.Entries) !== null && _b !== void 0 ? _b : [];
-    for (const entryResponse of entries) {
-        const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : 'Unknown Error Code';
-        const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : 'Unknown Error Message';
-        core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
-    }
-    core.setFailed(`Got ${failedCount} message failures, see action logs.`);
-}
-exports.eventCallback = eventCallback;
-function callPutEvents(params) {
-    const eb = new eventbridge_1.default();
-    eb.putEvents(params, eventCallback);
-}
-exports.callPutEvents = callPutEvents;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const params = yield (0, input_helper_1.getInputs)();
             core.debug(`params: ${params}`);
-            callPutEvents(params);
+            (0, event_helper_1.callPutEvents)(params);
         }
         catch (error) {
             if (error instanceof Error)
@@ -4796,7 +4832,7 @@ AWS.util.update(AWS, {
   /**
    * @constant
    */
-  VERSION: '2.1033.0',
+  VERSION: '2.1036.0',
 
   /**
    * @api private

@@ -1,0 +1,13 @@
+name: Bug
+description: A bug with the tool
+labels: ["bug"]
+assignees:
+  - tshauck
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: What seems to be the problem?
+    validations:
+      required: true

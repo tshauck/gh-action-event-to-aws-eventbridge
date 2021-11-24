@@ -1,0 +1,13 @@
+name: Other
+description: Something not covered by another issue template.
+labels: ["other"]
+assignees:
+  - tshauck
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What's on your mind?
+    validations:
+      required: true
