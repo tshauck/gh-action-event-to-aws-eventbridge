@@ -1,3 +1,6 @@
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
+
 import * as core from '@actions/core'
 
 import * as sdk from 'aws-sdk'
@@ -12,7 +15,6 @@ export function eventCallback(err: sdk.AWSError, data: EventBridge.PutEventsResp
   }
 
   const failedCount = data.FailedEntryCount ?? 0
-
   if (failedCount === 0) {
     core.info('No message failures, exiting.')
     return
