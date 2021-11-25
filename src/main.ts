@@ -1,12 +1,12 @@
 // (c) Copyright 2021 Trent Hauck
 // All Rights Reserved
 
-import * as core from '@actions/core'
+import * as core from "@actions/core"
 
-import * as sdk from 'aws-sdk'
-import EventBridge from 'aws-sdk/clients/eventbridge'
+import * as sdk from "aws-sdk"
+import EventBridge from "aws-sdk/clients/eventbridge"
 
-import {getInputs} from './input-helper'
+import {getInputs} from "./input-helper"
 
 export function eventCallback(err: sdk.AWSError, data: EventBridge.PutEventsResponse): void {
   if (err) {
@@ -16,14 +16,14 @@ export function eventCallback(err: sdk.AWSError, data: EventBridge.PutEventsResp
 
   const failedCount = data.FailedEntryCount ?? 0
   if (failedCount === 0) {
-    core.info('No message failures, exiting.')
+    core.info("No message failures, exiting.")
     return
   }
 
   const entries = data.Entries ?? []
   for (const entryResponse of entries) {
-    const errorCode = entryResponse.ErrorCode ?? 'Unknown Error Code'
-    const errorMessage = entryResponse.ErrorMessage ?? 'Unknown Error Message'
+    const errorCode = entryResponse.ErrorCode ?? "Unknown Error Code"
+    const errorMessage = entryResponse.ErrorMessage ?? "Unknown Error Message"
     core.info(`Got error code ${errorCode}, with message ${errorMessage}`)
   }
 

@@ -1,7 +1,7 @@
 // (c) Copyright 2021 Trent Hauck
 // All Rights Reserved
 
-import EventBridge from 'aws-sdk/clients/eventbridge'
+import EventBridge from "aws-sdk/clients/eventbridge"
 
 export interface EventsSettings {
   /*

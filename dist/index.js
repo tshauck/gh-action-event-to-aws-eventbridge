@@ -17,9 +17,9 @@ function eventSettingsToAWSEvent(es) {
                 EventBusName: es.eventBusName,
                 DetailType: es.detailType,
                 Source: es.source,
-                Detail: es.detail
-            }
-        ]
+                Detail: es.detail,
+            },
+        ],
     };
 }
 exports.eventSettingsToAWSEvent = eventSettingsToAWSEvent;
@@ -69,16 +69,16 @@ const github = __importStar(__nccwpck_require__(5438));
 const event_settings_1 = __nccwpck_require__(4416);
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
-        const eventBusName = core.getInput('event_bus_name');
-        const detailType = core.getInput('detail_type');
-        const source = core.getInput('source');
-        const passedDetail = core.getInput('detail');
-        const detail = passedDetail === '' ? JSON.stringify(github.context.payload) : passedDetail;
+        const eventBusName = core.getInput("event_bus_name");
+        const detailType = core.getInput("detail_type");
+        const source = core.getInput("source");
+        const passedDetail = core.getInput("detail");
+        const detail = passedDetail === "" ? JSON.stringify(github.context.payload) : passedDetail;
         const settings = {
             eventBusName,
             detailType,
             source,
-            detail
+            detail,
         };
         return (0, event_settings_1.eventSettingsToAWSEvent)(settings);
     });
@@ -93,6 +93,8 @@ exports.getInputs = getInputs;
 
 "use strict";
 
+// (c) Copyright 2021 Trent Hauck
+// All Rights Reserved
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -137,13 +139,13 @@ function eventCallback(err, data) {
     }
     const failedCount = (_a = data.FailedEntryCount) !== null && _a !== void 0 ? _a : 0;
     if (failedCount === 0) {
-        core.info('No message failures, exiting.');
+        core.info("No message failures, exiting.");
         return;
     }
     const entries = (_b = data.Entries) !== null && _b !== void 0 ? _b : [];
     for (const entryResponse of entries) {
-        const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : 'Unknown Error Code';
-        const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : 'Unknown Error Message';
+        const errorCode = (_c = entryResponse.ErrorCode) !== null && _c !== void 0 ? _c : "Unknown Error Code";
+        const errorMessage = (_d = entryResponse.ErrorMessage) !== null && _d !== void 0 ? _d : "Unknown Error Message";
         core.info(`Got error code ${errorCode}, with message ${errorMessage}`);
     }
     core.setFailed(`Got ${failedCount} message failures, see action logs.`);
@@ -4796,7 +4798,7 @@ AWS.util.update(AWS, {
   /**
    * @constant
    */
-  VERSION: '2.1033.0',
+  VERSION: '2.1035.0',
 
   /**
    * @api private
