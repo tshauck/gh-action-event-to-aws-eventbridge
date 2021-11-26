@@ -24,5 +24,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
           prerelease: ${{ github.event.inputs.prerelease }}
+          changelog_increment_filename: "body.md"
       - name: Print Version
         run: echo "Bumped to version ${{ steps.cz.outputs.version }}"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: "body.md"
+          tag_name: ${{ steps.cz.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
