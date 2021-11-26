@@ -58,7 +58,7 @@ EventBus. To do so, you need to configure the action like so:
   uses: aws-actions/configure-aws-credentials@master
   with:
     role-to-assume: ${{ secrets.ROLE }}  # needs permissions to write to the event bus
-- uses: tshauck/gh-action-event-to-aws-eventbridge@v0.1.0
+- uses: tshauck/gh-action-event-to-aws-eventbridge@main  # see the releases for tags
   with:
     event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
 ```
