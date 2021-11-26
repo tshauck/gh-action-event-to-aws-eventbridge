@@ -1,19 +1,11 @@
-name: 'merge'
+name: "integration-test"
 on: # rebuild any PRs and main branch changes
   push:
     branches:
       - main
 
 jobs:
-  build: # make sure build/ci work properly
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test:
+  integration-test:
     env:
       AWS_DEFAULT_REGION: us-west-2
 
@@ -35,11 +27,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - uses: ./
-        with:
-          event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
-          detail_type: 'GitHub Action Test Event'
       - uses: tshauck/gh-action-event-to-aws-eventbridge@main
         with:
-          event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
-          detail_type: 'GitHub Action Test Event'
+          event_bus_name: "tshauck-gh-action-event-to-aws-eventbridge"
+          detail_type: "GitHub Action Test Event"
