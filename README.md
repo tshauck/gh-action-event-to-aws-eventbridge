@@ -15,7 +15,7 @@
 ## User Guide
 
 The goal of this action is to facilitate sending events to an AWS EventBridge
-EventBus. To do so, you need to configure the event like so:
+EventBus. To do so, you need to configure the action like so:
 
 ```yaml
 - name: Configure AWS Credentials
@@ -36,6 +36,11 @@ EventBus. To do so, you need to configure the event like so:
 | source | `gh.event` |
 | detail | github.context.payload's value |
 
+For more information see:
+
+* [GitHub Repo Events](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows)
+* [EventBridge Homepage](https://docs.aws.amazon.com/eventbridge/)
+
 ### AWS Permissions
 
 The role associated with your authentication mechanism needs to be able to
@@ -48,8 +53,12 @@ For example of this in action, see the `merge.yml` workflow in this repo.
 
 Using this action is free for open source, academic, and other non-commercial activities.
 
-If you'd like to use this action for commercial activities, you must either
-pay an invoice or have a provable BTC/ETH transfer.
+If you'd like to use this action for commercial activities, you must do one of
+the following:
+
+* make a contribution to the repo
+* pay an invoice via Stripe
+* have a provable BTC/ETH transfer.
 
 ### Payment via Stripe
 
