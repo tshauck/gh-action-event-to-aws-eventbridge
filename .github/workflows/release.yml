@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       prerelease:
-        description: "Pre-release branch"
+        description: "Pre-release version"
         required: false
+      draft:
+        description: "Create draft release (yaml boolean)"
+        required: false
+        default: "true"
 
 jobs:
   bump_version:
@@ -32,5 +36,6 @@ jobs:
         with:
           body_path: "body.md"
           tag_name: v${{ steps.cz.outputs.version }}
+          draft: ${{ github.even.inputs.draft }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

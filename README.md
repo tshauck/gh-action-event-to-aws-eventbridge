@@ -23,7 +23,7 @@ the following:
 
 * make a code or documentation contribution to the repo
 * pay an invoice via Stripe
-* have a provable BTC/ETH transfer.
+* have a provable BTC/ETH transfer
 
 ### Payment via Stripe
 
