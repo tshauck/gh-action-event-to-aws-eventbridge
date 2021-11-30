@@ -27,6 +27,11 @@ export function eventCallback(err?: sdk.AWSError, data?: EventBridge.PutEventsRe
   core.setFailed(`Got ${failedCount} message failures, see action logs.`)
 }
 
+/**
+ * Makes the actual API call to AWS.
+ *
+ * @param {EventBridge.PutEventsRequest} params - Params to pass to putEvents.
+ */
 export function callPutEvents(params: EventBridge.PutEventsRequest): void {
   const eb = new EventBridge()
   eb.putEvents(params, eventCallback)

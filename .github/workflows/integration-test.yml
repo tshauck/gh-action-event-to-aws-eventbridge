@@ -1,8 +1,12 @@
+---
 name: "integration-test"
-on: # rebuild any PRs and main branch changes
-  push:
-    branches:
-      - main
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "The git ref to use."
+        default: "main"
+        required: false
 
 jobs:
   integration-test:
@@ -17,6 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:

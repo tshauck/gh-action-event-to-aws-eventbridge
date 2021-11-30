@@ -1,20 +1,24 @@
-name: 'GitHub Action to EventBridge'
-description: 'Sends events to an EventBridge bus.'
+---
+name: "GitHub Action to EventBridge"
+description: "Sends events to an EventBridge bus."
 inputs:
-  event_bus_name: # change this
+  event_bus_name:
     required: true
-    description: 'which event bus to send the event to'
-  detail_type: # change this
+    description: "which event bus to send the event to"
+  detail_type:
     required: false
-    description: 'The detail type for the event.'
-    default: 'GitHub Action Event'
-  source: # change this
+    description: "The detail type for the event."
+    default: "GitHub Action Event"
+  source:
     required: false
-    description: 'The source for this event, defaults to gh.event'
-    default: 'gh.event'
-  detail: # change this
+    description: "The source for this event, defaults to gh.event"
+    default: "gh.event"
+  detail:
     required: false
-    description: 'The detail for this event, defaults to event payload.'
+    description: "The detail for this event, defaults to event payload."
+  resources:
+    required: false
+    description: "A CSV of resources, defaults to '$GITHUB_ORG/$GITHUB_REPO'"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"

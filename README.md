@@ -61,6 +61,7 @@ EventBus. To do so, you need to configure the action like so:
 - uses: tshauck/gh-action-event-to-aws-eventbridge@main  # see the releases for tags
   with:
     event_bus_name: 'tshauck-gh-action-event-to-aws-eventbridge'
+    resources: 'my,resources'
 ```
 
 `event_bus_name` is the only required parameter. Generally, your options are:
@@ -71,6 +72,7 @@ EventBus. To do so, you need to configure the action like so:
 | detail_type | `GitHub Action Event` |
 | source | `gh.event` |
 | detail | github.context.payload's value |
+| resources | "$ORG/$REPO" |
 
 For more information see:
 

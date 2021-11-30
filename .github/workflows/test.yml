@@ -1,13 +1,14 @@
-name: 'build-and-local-test'
-on: # rebuild any PRs and main branch changes
+---
+name: "build-and-local-test"
+on:  # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
       - main
-      - 'releases/*'
+      - "releases/*"
 
 jobs:
-  build: # make sure build/ci work properly
+  build:  # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

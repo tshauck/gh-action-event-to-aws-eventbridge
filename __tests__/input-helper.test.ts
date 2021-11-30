@@ -26,6 +26,7 @@ describe("input-helper tests", () => {
       event_bus_name: "mock",
       detail_type: "detail",
       source: "source",
+      resources: "test,value",
       detail: '{"test": "value"}',
     }
 
@@ -36,10 +37,17 @@ describe("input-helper tests", () => {
     const pr: EventBridge.PutEventsRequest = await inputHelper.getInputs()
 
     expect(pr.Entries.length).toBe(1)
-    expect(pr.Entries[0].Source).toBe("source")
-    expect(pr.Entries[0].EventBusName).toBe("mock")
-    expect(pr.Entries[0].DetailType).toBe("detail")
-    expect(pr.Entries[0].Detail).toBe('{"test": "value"}')
+    const entry = pr.Entries[0]
+
+    expect(entry.Source).toBe("source")
+    expect(entry.EventBusName).toBe("mock")
+    expect(entry.DetailType).toBe("detail")
+    expect(entry.Detail).toBe('{"test": "value"}')
+
+    const resources = entry.Resources ?? []
+    expect(resources.length).toBe(2)
+    expect(resources[0]).toBe("test")
+    expect(resources[1]).toBe("value")
   })
 
   it("parses correctly without detail", async () => {
@@ -48,20 +56,31 @@ describe("input-helper tests", () => {
       detail_type: "detail",
       source: "source",
       detail: "",
+      resources: "",
     }
 
     jest.spyOn(core, "getInput").mockImplementation((name: string) => {
       return inputs[name]
     })
 
-    github.context.payload = {test: 1}
+    const payload = {
+      repository: {name: "test_name", owner: {name: "owner", login: "login"}},
+    }
+    github.context.payload = payload
 
     const pr: EventBridge.PutEventsRequest = await inputHelper.getInputs()
 
     expect(pr.Entries.length).toBe(1)
-    expect(pr.Entries[0].Source).toBe("source")
-    expect(pr.Entries[0].EventBusName).toBe("mock")
-    expect(pr.Entries[0].DetailType).toBe("detail")
-    expect(pr.Entries[0].Detail).toBe('{"test":1}')
+    const entry = pr.Entries[0]
+
+    expect(entry.Source).toBe("source")
+    expect(entry.EventBusName).toBe("mock")
+    expect(entry.DetailType).toBe("detail")
+    expect(entry.Detail).toBe(JSON.stringify(payload))
+
+    const resources = entry.Resources ?? []
+    expect(resources.length).toBe(1)
+
+    expect(resources[0]).toStrictEqual("owner/test_name")
   })
 })
