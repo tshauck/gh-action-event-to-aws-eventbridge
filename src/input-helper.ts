@@ -31,5 +31,6 @@ export async function getInputs(): Promise<EventBridge.PutEventsRequest> {
     detail,
     resources,
   }
+  core.debug(`debug input params: ${JSON.stringify(settings)}`)
   return eventSettingsToAWSEvent(settings)
 }
