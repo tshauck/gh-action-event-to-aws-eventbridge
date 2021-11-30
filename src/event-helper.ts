@@ -34,5 +34,6 @@ export function eventCallback(err?: sdk.AWSError, data?: EventBridge.PutEventsRe
  */
 export function callPutEvents(params: EventBridge.PutEventsRequest): void {
   const eb = new EventBridge()
+  core.debug(`making call to putEvents with ${JSON.stringify(params)}`)
   eb.putEvents(params, eventCallback)
 }
