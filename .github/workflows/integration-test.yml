@@ -26,7 +26,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - uses: ./
+      - uses: tshauck/gh-action-event-to-aws-eventbridge@main
         with:
           event_bus_name: "tshauck-gh-action-event-to-aws-eventbridge"
           detail_type: "GitHub Action Test Event"
