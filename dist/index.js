@@ -61,6 +61,7 @@ exports.eventCallback = eventCallback;
  */
 function callPutEvents(params) {
     const eb = new eventbridge_1.default();
+    core.debug(`making call to putEvents with ${JSON.stringify(params)}`);
     eb.putEvents(params, eventCallback);
 }
 exports.callPutEvents = callPutEvents;
