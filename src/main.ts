@@ -8,7 +8,7 @@ import {getInputs} from "./input-helper"
 export async function run(): Promise<void> {
   try {
     const params = await getInputs()
-    core.debug(`params: ${params}`)
+    core.debug(`params: ${JSON.stringify(params)}`)
     callPutEvents(params)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
