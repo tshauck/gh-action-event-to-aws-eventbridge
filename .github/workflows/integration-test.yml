@@ -2,11 +2,6 @@
 name: "integration-test"
 on:
   workflow_dispatch:
-    inputs:
-      ref:
-        description: "The git ref to use."
-        default: "main"
-        required: false
 
 jobs:
   integration-test:
@@ -21,8 +16,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.ref }}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
@@ -33,7 +26,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - uses: tshauck/gh-action-event-to-aws-eventbridge@main
+      - uses: ./
         with:
           event_bus_name: "tshauck-gh-action-event-to-aws-eventbridge"
           detail_type: "GitHub Action Test Event"

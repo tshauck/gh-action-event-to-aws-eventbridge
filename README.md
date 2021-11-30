@@ -100,7 +100,7 @@ Resources:
     Properties:
       Name: "GitHubApiDestination"
       ConnectionArn: !GetAtt GitHubConnection.Arn
-      InvocationEndpoint: https://api.github.com/repos/my/repo/issues
+      InvocationEndpoint: https://webhook.site/11fa176d-c1a9-4d03-aa79-d933b40947bb
       HttpMethod: POST
       InvocationRateLimitPerSecond: 10
 
