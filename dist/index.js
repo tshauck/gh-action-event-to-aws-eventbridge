@@ -157,6 +157,7 @@ function getInputs() {
             detail,
             resources,
         };
+        core.debug(`debug input params: ${JSON.stringify(settings)}`);
         return (0, event_settings_1.eventSettingsToAWSEvent)(settings);
     });
 }
@@ -209,7 +210,6 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const params = yield (0, input_helper_1.getInputs)();
-            core.debug(`params: ${params}`);
             (0, event_helper_1.callPutEvents)(params);
         }
         catch (error) {
