@@ -137,7 +137,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const event_settings_1 = __nccwpck_require__(4416);
 function getInputs() {
-    var _a, _b, _c, _d;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const eventBusName = core.getInput("event_bus_name");
         const detailType = core.getInput("detail_type");
@@ -147,9 +147,8 @@ function getInputs() {
         const passedResources = core.getInput("resources");
         const resources = passedResources === "" ? [] : passedResources.split(",");
         if (resources.length === 0) {
-            const owner = (_b = (_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.owner.name) !== null && _b !== void 0 ? _b : "UnknownOwner";
-            const name = (_d = (_c = github.context.payload.repository) === null || _c === void 0 ? void 0 : _c.name) !== null && _d !== void 0 ? _d : "UnknownRepo";
-            resources.push(`${owner}/${name}`);
+            const fullName = (_b = (_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name) !== null && _b !== void 0 ? _b : "UnknownRepo";
+            resources.push(fullName);
         }
         const settings = {
             eventBusName,

@@ -64,7 +64,11 @@ describe("input-helper tests", () => {
     })
 
     const payload = {
-      repository: {name: "test_name", owner: {name: "owner", login: "login"}},
+      repository: {
+        full_name: "owner/test_name",
+        name: "test_name",
+        owner: {name: "owner", login: "login"},
+      },
     }
     github.context.payload = payload
 
