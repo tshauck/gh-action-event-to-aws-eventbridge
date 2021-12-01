@@ -1,3 +1,13 @@
+## v0.4.0 (2021-12-01)
+
+### Fix
+
+- use full name
+
+### Feat
+
+- add ability to pass resources to action
+
 ## v0.3.1 (2021-11-26)
 
 ### Fix
