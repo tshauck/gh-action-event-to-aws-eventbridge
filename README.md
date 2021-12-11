@@ -36,12 +36,8 @@ $10 or subscribe for $1/month.
 ### Sending BTC/ETH
 
 You are also granted usage rights if you can prove a transfer of at least 0.0025
-ETH or at least 0.00025 BTC, see the following QR codes for the respective wallets:
-
-|Token|Amount|Address |QR Code|
-| --- | ----|---- | ----- |
-|ETH| 0.00250 ETH | `0xd25eace6c5b1cFfAD0d771EeE9E68a7E69CE534f` | ![ETH](./.github/crypto-qr/eth.png) |
-|BTC| 0.00025 BTC | `37TWrgEiThdbkngZAtptWdK1hZ7ySD1BDA` | ![BTC](./.github/crypto-qr/btc.png) |
+ETH or at least 0.00025 BTC. For wallet information see
+[trenthauck.eth](https://app.ens.domains/name/trenthauck.eth/details).
 
 ## User Guide
 
