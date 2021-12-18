@@ -7,6 +7,12 @@ import * as github from "@actions/github"
 import EventBridge from "aws-sdk/clients/eventbridge"
 import {eventSettingsToAWSEvent} from "./event-settings"
 
+/**
+ * Convert the core inputs into a put event promise.
+ *
+ * @async
+ * @returns {Promise<EventBridge.PutEventsRequest>} The SDK event settings.
+ */
 export async function getInputs(): Promise<EventBridge.PutEventsRequest> {
   const eventBusName: string = core.getInput("event_bus_name")
   const detailType: string = core.getInput("detail_type")

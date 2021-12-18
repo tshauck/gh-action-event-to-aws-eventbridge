@@ -27,6 +27,12 @@ export interface EventsSettings {
   resources: string[]
 }
 
+/**
+ * convert EventSettings to a EventBridge.PutEventsRequest
+ *
+ * @param {EventsSettings} es - The event settings from the inputs
+ * @returns {EventBridge.PutEventsRequest} The request aws expects
+ */
 export function eventSettingsToAWSEvent(es: EventsSettings): EventBridge.PutEventsRequest {
   return {
     Entries: [

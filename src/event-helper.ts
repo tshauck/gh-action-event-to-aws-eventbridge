@@ -5,6 +5,12 @@ import * as core from "@actions/core"
 import * as sdk from "aws-sdk"
 import EventBridge from "aws-sdk/clients/eventbridge"
 
+/**
+ * eventCallback is called after putEvents returns err or data
+ *
+ * @param {sdk.AWSError} err- Any AWSError returned from put events.
+ * @param {EventBridge.PutEventsResponse} data - The actual data response.
+ */
 export function eventCallback(err?: sdk.AWSError, data?: EventBridge.PutEventsResponse): void {
   if (err) {
     core.setFailed(String(err))
